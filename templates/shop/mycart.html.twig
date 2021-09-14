@@ -1,0 +1,102 @@
+{% extends 'template.html.twig' %}
+
+{% block styles %}
+	<link rel="stylesheet" href="{{asset('css/mycart.css')}}">
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5 mycart-container">
+		<div class="d-flex row">
+			<div class="col-sm-8">
+				{% if products is defined %}
+					{% for i, product in products %}
+						<div class="row p-2 bg-white border rounded mycart-card deleteproduct{{product.id}}">
+							<div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image" src="{{asset ('images/products/' ~ product.image) }}"></div>
+							<div class="col-md-6 mt-1 ">
+								<h5>{{product.title}}</h5>
+								
+								<div class="mt-1 mb-1 spec-1">
+								{% for j, category in product.category %}
+									<span class="dot"></span>
+									<span>{{product.category[j]}}</span>
+								{% endfor %}
+								</div>
+								{#Delete button#}
+								<a onclick="deleteproduct({{product.id}}, {{subtotalprice}})"><i class="fa fa-trash"></i>Eliminar</a>
+								
+							</div>
+							<div class="align-items-center align-content-center col-md-3 border-left ">
+								<div class="d-flex flex-row align-items-center">
+									<h4 class="mr-1">{{product.price}} €</h4>
+									{#Discount prices#}
+									{# <span class="strike-text">$20.99</span>#}
+								</div>
+								<h6 class="text-success">Free shipping</h6>
+								<div class="d-flex flex-column mt-4"></div>
+							</div>
+						</div>
+
+					{% endfor %}
+
+				</div>
+				<div class="col-sm-4 payment">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">
+								<span>Payment<span></h5>
+									<p class="card-text mb-1">Subtotal: 
+										<span class="price-text price">{{subtotalprice}} €</span>
+									</p>
+									<p class="card-text mb-1">Shipping:
+										<span class="price-text"> No available </span>
+									</p>
+									<hr class="spaciator">
+									<p class="card-text mb-1">Total: 
+										<span class="price-text price">{{subtotalprice}} €</span>
+									</p>
+									<a href="#" class="btn btn-primary w-100 btn-payment">Pay</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% else %}
+				<p class="card-text">There is not any product on your shopping cart</p>
+			{% endif %}
+				<p class="card-text emptycart-text-jquery ml-3">There is not any product on your shopping cart</p>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+		{% block scripts %}
+			<script>
+				function deleteproduct(id, subtotalprice){
+					$.ajax({
+					url:'{{ path('deleteproductfromcart') }}',
+					type: "POST",
+					dataType: "json",
+					data: {
+					"idproduct": id,
+					"subtotalprice": subtotalprice
+				},
+				async: true,
+				success:function (data) { //Devuelve un array
+				data = JSON.parse(data);
+				
+
+				if(data[1] == 0){
+
+					$('.payment').remove();
+					$('.deleteproduct' + data[0]).remove();
+					$('.emptycart-text-jquery').show();
+				} else{
+					$('.deleteproduct' + data[0]).remove();
+					$('.price').text(data[1] + " €");
+				}
+				}
+				});
+				
+				};
+			</script>
+		{% endblock %}

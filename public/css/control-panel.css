@@ -1,0 +1,11 @@
+:root {
+    --color-primary: #3a8bcd;
+    --color-success: hsl(157, 69%, 38%);
+    --color-info: hsl(201, 94%, 37%);
+    --color-warning: hsl(9, 62%, 36%);
+    --color-danger: var(--red-600);
+}
+
+.page-item.active .page-link {
+    background-color: var(--color-primary);
+}

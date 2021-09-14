@@ -1,0 +1,32 @@
+:root {
+    --color-primary: #3a8bcd;
+    --hold-color: #008cff;
+}
+
+.card-img-top{
+    width: auto;
+    max-width: 175px;
+    max-height: 177px;
+    align-items: center;
+
+}
+.price{
+    font-size: 20px;
+    font-weight: bold;
+}
+.btn-addtocart{
+    background-color: var(--hold-color);
+    border-color: var(--hold-color) ;
+    width: 100%;
+    height: 50px;
+    box-shadow: none;
+    opacity: 0.7;
+    border-radius: 3px;
+}
+.btn-addtocart:hover{
+    transition: 1s;
+    opacity: initial;
+}
+.description-field{
+    height: 70px;
+}

@@ -1,0 +1,84 @@
+{% extends 'template.html.twig' %}
+
+{% block styles %}
+	<link rel="stylesheet" href="{{asset('css/products.css')}}">
+{% endblock %}
+
+{% block body %}
+
+	<!-- Products -->
+		<div class="banner-shop">
+		<div id="product_message" class="w-25 text-center mx-auto">
+		{% for flash_message in app.session.flashbag.get('success_product_added') %}
+		<div class="alert alert-success">
+			{{ flash_message }}
+		</div>
+		{% endfor %}
+		</div>
+		
+		<div class="row ml-4 mr-4">
+		
+			{% for i, product in products %}
+				{% if i % 4 == 0 %}
+				</div>
+				<div class="row ml-4 mr-4 mt-4">
+				{% endif %}
+				<!--Card 1-->
+				<div class="col-sm-3">
+					<div
+						class="card card-cascade card-ecommerce shadow">
+						<!--Card image-->
+						<div class="view view-cascade overlay text-center p-5">
+							<img class="card-img-top product-image" src="{{asset ('images/products/' ~ product.image) }}">
+							<a>
+								<div class="mask rgba-white-slight"></div>
+							</a>
+						</div>
+						<!--Card Body-->
+						<div
+							class="card-body card-body-cascade text-center">
+							<!--Card Title-->
+							<h4 class="card-title">
+								<strong>
+									<a href="">{{product.title}}</a>
+								</strong>
+							</h4>
+							<!-- Card Description-->
+							<p class="card-text description-field">{{product.description}}
+							</p>
+							<!-- Card Description-->
+							<p class="price mb-3te">{{product.price}}€</p>
+							<!--Card button-->
+							<input type="button" onClick="addproduct({{product.id}})" class="btn-addtocart addproduct" id="addproduct{{products[i].id}}" value="Añadir al carrito"/>
+							
+						</div>
+					</div>
+				</div>
+
+			{% endfor %}
+			
+		</div>
+
+		{% block scripts %}
+			<script>
+				function addproduct(id){
+					$.ajax({
+					url:'{{ path('additemtocart') }}',
+					type: "POST",
+					dataType: "json",
+					data: {
+					"idproduct": id
+				},
+				async: true,
+				success:function (idproduct) { //Devuelve un array
+				idproduct = JSON.parse(idproduct);
+				let lastid = idproduct[idproduct.length - 1];
+    			$( '#addproduct' + lastid ).prop('value', 'Añadido al carrito');
+				$( '#addproduct' + lastid ).css('background-color', "#d4edda").css('color', '#155724').css('border-color', '#c3e6cb');
+				}
+				});
+				};
+
+			</script>
+		{% endblock %}
+	{% endblock %}

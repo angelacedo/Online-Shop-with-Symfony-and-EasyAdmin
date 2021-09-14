@@ -1,0 +1,12 @@
+# config/packages/easy_admin.yaml
+easy_admin:
+    entities:
+        Products:
+            class: App\Entity\Products
+            form:  # <-- 'form' is applied to both 'new' and 'edit' views
+                fields:
+                    - 'id'
+                    - { property: 'email', type: 'email', label: 'Contact' }
+                    - UploadImage
+                    - { property: 'Upload File', type: 'vich_image', base_path: '%product_images%' }
+    # ...
